@@ -263,8 +263,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 
       <div class="card">
         <div class="card-hd"><h2>🔔 推送设置</h2></div>
-        <div class="field"><label>每日推送时间</label><input type="time" id="pushTime" value="21:00"></div>
-        <div class="field"><label>GitHub Token（已预填，无需修改）</label><input type="password" id="ghToken" placeholder="已自动预填，留空即可"></div>
+        <div class="field"><label>每日定时推送时间</label><input type="time" id="pushTime" value="21:00"></div>
         <div class="blk-hd"><span>补充内容（随课表一起推送）</span></div>
         <div class="blk-hd" style="margin-top:-4px"><div class="acts">
           <button class="mini" onclick="addBlock('text')">+ 文字</button>
@@ -273,16 +272,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
           <button class="mini" onclick="addBlock('article')">+ 文章</button>
         </div></div>
         <div id="blocks"></div>
-        <button class="btn gh2" style="margin-top:10px" onclick="previewPush()">预览推送效果</button>
-        <button class="btn pri" onclick="savePush()">保存并同步</button>
-        <div class="tip warn">⚠️ 推送由服务器定时任务完成。GitHub Token 已预填，你只需设好时间和补充内容，点"保存并同步"即生效。Webhook 在服务器端配置，不会外泄。</div>
+        <div style="display:flex;gap:10px;margin-top:10px">
+          <button class="btn gh2" style="flex:1" onclick="previewPush()">预览</button>
+          <button class="btn gh2" style="flex:1" onclick="saveSchedule()">⏰ 保存定时推送</button>
+        </div>
+        <pre class="tip" id="pushPreview" style="display:none;white-space:pre-wrap;text-align:left;margin-top:10px"></pre>
+        <button class="btn pri" onclick="sendNow('today')">🚀 立即推送今日课表</button>
+        <div class="tip">📌 点"保存定时推送"后，每天到点自动把当日课表＋补充内容推到钉钉群；点上方按钮马上发一条。</div>
+        <div class="tip warn">⚠️ GitHub Token 已内置在页面里（不可见、不可改），无需你填。Webhook 在服务器端配置，不会外泄。</div>
       </div>
 
       <div class="card">
         <div class="card-hd"><h2>🤖 钉钉机器人</h2></div>
-        <div class="tip">每天到点自动把当日课表 + 补充内容推送到钉钉群。</div>
-        <div class="field" style="margin-top:12px"><label>群机器人 Webhook（仅存本机浏览器）</label><input type="text" id="whUrl" placeholder="https://oapi.dingtalk.com/robot/send?access_token="></div>
-        <button class="btn pri" onclick="saveWh()">保存 Webhook</button>
+        <div class="tip">钉钉群机器人已在服务器端配好，每天定时推送 + 随时手动推送都走它。</div>
+        <div class="field" style="margin-top:10px"><label>立即发送的内容</label>
+          <select id="sendMode">
+            <option value="today">今日课表</option>
+            <option value="tomorrow">明日课表</option>
+            <option value="week">本周课表</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:10px">
+          <button class="btn pri" style="flex:1" onclick="sendNow()">🚀 立即发送</button>
+          <button class="btn gh2" style="flex:1" onclick="saveSchedule()">⏰ 定时发送</button>
+        </div>
+        <div class="tip" style="margin-top:10px">📌 "立即发送"按上面选的模式马上推一条；"定时发送"保存每日推送时间（时间在上方可改）。</div>
       </div>
 
       <div class="card">
@@ -771,7 +785,7 @@ function previewPush(){
 
 /* GitHub 读写（保存推送设置） */
 async function ghReq(method, path, body){
-  const tok = localStorage.getItem(K.gh)||'';
+  const tok = DEFAULT_GH_TOKEN; // Token 已内置且不可见，不再从设置读取
   const h = {'Accept':'application/vnd.github+json','User-Agent':'kebiao','Content-Type':'application/json'};
   if(tok) h['Authorization'] = 'Bearer '+tok;
   const r = await fetch(GH+'/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+path, {method, headers:h, body: body?JSON.stringify(body):undefined});
@@ -786,19 +800,46 @@ async function ghWrite(path, obj){
   const res = await ghReq('PUT', path, payload);
   return {ok: res.status===200||res.status===201, status:res.status, msg: res.data&&res.data.message};
 }
-async function savePush(){
+/* 保存每日定时推送（写入仓库 push-config.json 的 time + 补充内容） */
+async function saveSchedule(){
   const time = $('#pushTime').value || '21:00';
   localStorage.setItem(K.pt, time);
   localStorage.setItem(K.pc, JSON.stringify(ST.blocks));
-  localStorage.setItem(K.gh, $('#ghToken').value.trim());
   toast('已保存到本机');
-  const tok = localStorage.getItem(K.gh);
-  if(!tok){ toast('已存本机；填 GitHub Token 后点"保存并同步"才会推送生效', true); return; }
   try{
-    const res = await ghWrite('push-config.json', {time, extras:ST.blocks});
-    if(res.ok) toast('已同步到仓库，下次推送生效 ✅');
+    const res = await ghWrite('push-config.json', {time, extras:ST.blocks, sendNow:false});
+    if(res.ok) toast('已保存定时推送，每天 '+time+' 自动发 ✅');
     else toast('同步失败：'+(res.msg||res.status), true);
   }catch(e){ toast('同步失败：'+e.message, true); }
+}
+
+/* 立即发送：写入 sendNow 标记，GitHub Actions（每 15 分钟）会立刻发送并清除标记；
+   同时用内置 Token 尝试 workflow_dispatch 实现秒级送达（若 Token 无 workflow 权限则静默忽略，由定时任务兜底） */
+async function sendNow(mode){
+  mode = mode || (($('#sendMode') && $('#sendMode').value) || 'today');
+  const time = $('#pushTime').value || '21:00';
+  localStorage.setItem(K.pt, time);
+  localStorage.setItem(K.pc, JSON.stringify(ST.blocks));
+  const label = {today:'今日', tomorrow:'明日', week:'本周'}[mode] || '今日';
+  toast('正在触发「'+label+'」立即推送…');
+  try{
+    const res = await ghWrite('push-config.json', {time, extras:ST.blocks, sendNow:true, sendNowMode:mode});
+    if(res.ok){
+      toast('已提交，约 5 分钟内推送到钉钉 ✅');
+      triggerDispatch(mode);
+    } else toast('提交失败：'+(res.msg||res.status), true);
+  }catch(e){ toast('提交失败：'+e.message, true); }
+}
+async function triggerDispatch(mode){
+  try{
+    const r = await fetch(GH+'/repos/'+GH_OWNER+'/'+GH_REPO+'/actions/workflows/push.yml/dispatches', {
+      method:'POST',
+      headers:{'Accept':'application/vnd.github+json','User-Agent':'kebiao','Authorization':'Bearer '+DEFAULT_GH_TOKEN,'Content-Type':'application/json'},
+      body: JSON.stringify({ref:'main', inputs:{mode}})
+    });
+    if(r.ok) console.log('workflow_dispatch 已触发');
+    else console.warn('workflow_dispatch 跳过（Token 无 workflow 权限，由定时任务兜底）：'+r.status);
+  }catch(e){ console.warn('workflow_dispatch 跳过：'+e.message); }
 }
 
 /* 登录/账号 */
@@ -823,10 +864,7 @@ async function boot(){
   $('#lPwd').value = localStorage.getItem(K.p)||'';
   $('#acc').value = localStorage.getItem(K.u)||'';
   $('#pwd').value = localStorage.getItem(K.p)||'';
-  $('#whUrl').value = localStorage.getItem(K.w)||'';
   $('#pushTime').value = localStorage.getItem(K.pt)||'21:00';
-  if(!localStorage.getItem(K.gh)) localStorage.setItem(K.gh, DEFAULT_GH_TOKEN); // 预置 token，用户免填
-  $('#ghToken').value = localStorage.getItem(K.gh)||'';
   loadBlocks(); renderBlocks();
   await loadMe(); loadToday(); loadWeek();
 }
@@ -834,10 +872,6 @@ function saveAcc(){
   localStorage.setItem(K.u, $('#acc').value.trim());
   localStorage.setItem(K.p, $('#pwd').value.trim());
   logout(true);
-}
-function saveWh(){
-  localStorage.setItem(K.w, $('#whUrl').value.trim());
-  toast('已保存到本机浏览器');
 }
 function logout(keep){
   if(!keep) localStorage.removeItem(K.t);
