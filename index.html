@@ -391,6 +391,19 @@ async function login(user, pwd){
   localStorage.setItem(K.p, pwd);
   return j.data;
 }
+/* 打开页面时确保 token 有效：失效（含"200 但返回空课表"的情况）则自动用本机凭据重登 */
+async function ensureLogin(){
+  if(ST.token){
+    try{
+      const r = await fetch(BASE+'/biz/user/info',{headers:{'Authorization':ST.token,'Accept':'application/json'}});
+      const j = await r.json().catch(()=>({}));
+      if(j.code===200) return; // token 仍有效
+    }catch(e){}
+  }
+  const u=localStorage.getItem(K.u), p=localStorage.getItem(K.p);
+  if(u&&p){ try{ await login(u,p); return; }catch(e){} }
+  throw new Error('登录已失效，请在「我的」重新输入账号密码');
+}
 
 /* 解析课程 */
 function parse(item){
@@ -751,6 +764,7 @@ async function doLogin(){
 }
 async function boot(){
   applyTheme(localStorage.getItem(K.theme)||'light');
+  try{ await ensureLogin(); }catch(e){ $('#mask').classList.remove('hide'); toast(e.message, true); return; }
   $('#lUser').value = localStorage.getItem(K.u)||'';
   $('#lPwd').value = localStorage.getItem(K.p)||'';
   $('#acc').value = localStorage.getItem(K.u)||'';
