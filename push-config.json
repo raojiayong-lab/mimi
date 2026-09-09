@@ -1,11 +1,6 @@
 {
   "time": "21:00",
-  "extras": [
-    {
-      "type": "text",
-      "text": "你是小笨蛋"
-    }
-  ],
+  "extras": [],
   "sendNow": true,
-  "sendNowMode": "today"
+  "sendNowMode": "tomorrow"
 }
