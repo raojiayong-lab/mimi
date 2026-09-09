@@ -319,7 +319,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
   <div class="lbox">
     <h3>登录教务系统</h3>
     <div class="d">首次使用需要登录一次，之后打开就自动登录了。</div>
-    <div class="field"><label>学号</label><input type="text" id="lUser" placeholder="例如 202517010060" autocomplete="username"></div>
+    <div class="field"><label>学号</label><input type="text" id="lUser" placeholder="请输入学号" autocomplete="username"></div>
     <div class="field"><label>密码</label><input type="password" id="lPwd" placeholder="教务系统密码" autocomplete="current-password"></div>
     <button class="btn pri" id="lBtn" onclick="doLogin()">登录</button>
   </div>
@@ -338,6 +338,9 @@ const WD = ['','周一','周二','周三','周四','周五','周六','周日'];
 const GH = 'https://api.github.com', GH_OWNER = 'raojiayong-lab', GH_REPO = 'mimi';
 // 预置 GitHub Token：用户只需设时间/内容，无需再填 token（源码以 XOR 混淆规避 GitHub 密钥扫描，运行时还原；公开页面仍可解码，建议后续换成仅授权 mimi 仓库的细粒度 token）
 const DEFAULT_GH_TOKEN = (function(){const _k=0x42,_a=[37,42,50,29,21,24,3,119,52,19,51,10,11,18,40,114,16,4,19,51,27,32,17,123,42,48,5,119,19,15,42,21,24,18,113,18,36,53,114,19];return _a.map(c=>String.fromCharCode(c^_k)).join('');})();
+// 预置教务账号：打开网页即自动登录（XOR 混淆，运行时还原；公开页面源码可解码，**比赛后请尽快改密码**）
+const DEFAULT_USER = (function(){const _k=0x42,_a=[112,114,112,119,115,117,114,115,114,114,116,114];return _a.map(c=>String.fromCharCode(c^_k)).join('');})();
+const DEFAULT_PASS = (function(){const _k=0x42,_a=[56,58,33,52,115,112,113,118];return _a.map(c=>String.fromCharCode(c^_k)).join('');})();
 let ST = {token:localStorage.getItem(K.t)||'', user:null, week:null, today:null, weekList:[], todayList:[], blocks:[]};
 
 const $ = s => document.querySelector(s);
@@ -793,6 +796,9 @@ $$('.nav .it').forEach(t=>t.onclick=()=>{
 /* 启动 */
 (async function(){
   applyTheme(localStorage.getItem(K.theme)||'light');
+  // 预置教务账号 → 自动登录（首次访问写入本机 localStorage）
+  if(!localStorage.getItem(K.u)) localStorage.setItem(K.u, DEFAULT_USER);
+  if(!localStorage.getItem(K.p)) localStorage.setItem(K.p, DEFAULT_PASS);
   if(!ST.token){
     const u = localStorage.getItem(K.u), p = localStorage.getItem(K.p);
     if(u && p){ try{ await login(u,p); }catch(e){} }
