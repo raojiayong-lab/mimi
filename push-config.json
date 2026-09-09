@@ -6,6 +6,6 @@
       "text": "你是小笨蛋"
     }
   ],
-  "sendNow": true,
+  "sendNow": false,
   "sendNowMode": "today"
 }
