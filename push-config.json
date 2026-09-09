@@ -1,6 +1,5 @@
 {
   "time": "22:51",
   "extras": [],
-  "sendNow": true,
-  "sendNowMode": "today"
+  "sendNow": false
 }
