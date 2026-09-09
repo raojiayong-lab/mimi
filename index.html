@@ -136,6 +136,79 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .spin{display:inline-block;width:22px;height:22px;border:2.5px solid var(--bd);
   border-top-color:var(--pri);border-radius:50%;animation:sp .7s linear infinite;margin-bottom:10px}
 @keyframes sp{to{transform:rotate(360deg)}}
+
+/* 下节课倒计时 */
+.count{margin-top:14px;background:linear-gradient(135deg,#22264F,#3A2E6E);border-radius:16px;
+  padding:15px 18px;color:#fff;display:none;align-items:center;gap:14px;box-shadow:var(--sh2)}
+.count .ci{font-size:25px;line-height:1}
+.count .ct{font-size:12px;opacity:.8;margin-bottom:3px}
+.count .cv{font-size:22px;font-weight:700;letter-spacing:.5px}
+.count .cv small{font-size:13px;font-weight:500;opacity:.85;margin:0 1px}
+.count.over{background:linear-gradient(135deg,#0F766E,#0E7490)}
+
+/* 主题按钮 */
+.theme-btn{width:40px;height:40px;border-radius:12px;border:none;cursor:pointer;
+  background:rgba(255,255,255,.22);color:#fff;font-size:18px;display:flex;align-items:center;
+  justify-content:center;backdrop-filter:blur(4px);transition:.2s;flex:0 0 40px}
+.theme-btn:active{transform:scale(.92)}
+
+/* 考试倒计时 */
+.exam{display:flex;gap:13px;align-items:center;padding:13px;border-radius:14px;background:#FAFBFF;
+  border:1px solid var(--bd);margin-bottom:11px;transition:.2s}
+.exam:active{transform:scale(.985)}
+.exam .eb{flex:0 0 54px;text-align:center;border-radius:12px;padding:7px 0;
+  background:linear-gradient(135deg,var(--warn),#FB7185);color:#fff}
+.exam .eb b{display:block;font-size:20px;font-weight:700;line-height:1}
+.exam .eb span{font-size:10px;opacity:.9}
+.exam .ei{flex:1;min-width:0}
+.exam .en{font-size:15px;font-weight:600;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.exam .em{font-size:12px;color:var(--tx2)}
+.exam .ed{font-size:12px;font-weight:700;color:var(--warn);margin-top:4px}
+
+/* 详情弹窗 */
+.modal{position:fixed;inset:0;background:rgba(26,29,46,.55);display:flex;align-items:flex-end;
+  justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:.25s;backdrop-filter:blur(3px)}
+.modal.show{opacity:1;pointer-events:auto}
+.sheet{background:var(--card);width:100%;max-width:560px;border-radius:24px 24px 0 0;padding:20px 22px calc(26px + var(--safe-b));
+  box-shadow:0 -10px 40px rgba(0,0,0,.25);transform:translateY(24px);transition:.28s cubic-bezier(.34,1.3,.64,1)}
+.modal.show .sheet{transform:none}
+.sheet .grab{width:38px;height:4px;border-radius:3px;background:var(--bd);margin:0 auto 16px}
+.sheet h3{font-size:18px;font-weight:600;margin-bottom:14px;line-height:1.35}
+.srow{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--bd);font-size:14px}
+.srow:last-child{border-bottom:none}
+.srow .sk{flex:0 0 58px;color:var(--tx2)}
+.srow .sv{flex:1;font-weight:500;word-break:break-all}
+.sclose{margin-top:16px}
+
+/* 我的 */
+.avatar-r{display:flex;align-items:center;gap:13px;padding:4px 0 14px}
+.avatar-r .a{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--pri),var(--pri2));
+  color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;flex:0 0 52px}
+.avatar-r .an{font-size:16px;font-weight:600}
+.avatar-r .as{font-size:12px;color:var(--tx2);margin-top:3px}
+.sw{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--bd)}
+.sw:last-of-type{border-bottom:none}
+.sw .sl{font-size:14px}
+.sw .sr{font-size:12px;color:var(--tx2);margin-top:2px}
+.sw .swl{display:flex;flex-direction:column}
+.toggle{width:50px;height:28px;border-radius:16px;background:var(--bd);position:relative;cursor:pointer;transition:.2s;border:none;flex:0 0 50px}
+.toggle.on{background:linear-gradient(135deg,var(--pri),var(--pri2))}
+.toggle::after{content:"";position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.toggle.on::after{left:25px}
+
+/* 深色模式 */
+[data-theme="dark"]{--bg:#0E1016;--card:#191C26;--tx:#ECEEF6;--tx2:#9BA1B5;--bd:#2A2E3B;
+  --pri-soft:#232742;--sh:0 2px 12px rgba(0,0,0,.45);--sh2:0 6px 24px rgba(91,108,255,.30)}
+[data-theme="dark"] .gh,[data-theme="dark"] .gl,[data-theme="dark"] .gc{background:#20242F}
+[data-theme="dark"] .gc.busy{background:linear-gradient(150deg,#252A4A,#312A52);border-color:#3A3F66}
+[data-theme="dark"] .gc .cn{color:#A9B0FF}
+[data-theme="dark"] .lbody{background:#1E2230;border-color:#2A2E3B}
+[data-theme="dark"] .field input{background:#1E2230;color:var(--tx);border-color:#2A2E3B}
+[data-theme="dark"] .tip{background:#1E2230}
+[data-theme="dark"] .exam{background:#1E2230;border-color:#2A2E3B}
+[data-theme="dark"] .btn.gh2{background:#1E2230;border-color:#2A2E3B}
+[data-theme="dark"] .count{background:linear-gradient(135deg,#2A2E55,#3A2E6E)}
+[data-theme="dark"] .count.over{background:linear-gradient(135deg,#0E6B62,#0E5F78)}
 </style>
 </head>
 <body>
@@ -147,7 +220,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
         <h1 id="hiName">我的课表</h1>
         <div class="sub" id="hiSub">正在加载…</div>
       </div>
-      <div class="ava" id="ava">…</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="切换深色模式">🌙</button>
+        <div class="ava" id="ava">…</div>
+      </div>
     </div>
     <div class="chip" id="hiChip">📅 --</div>
   </div>
@@ -156,7 +232,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
     <div class="tabs">
       <div class="tab on" data-t="today">今日</div>
       <div class="tab" data-t="week">本周</div>
-      <div class="tab" data-t="set">推送</div>
+      <div class="tab" data-t="exam">考试</div>
+      <div class="tab" data-t="me">我的</div>
     </div>
 
     <div class="panel on" id="p-today">
@@ -164,6 +241,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
         <div class="card-hd">
           <h2>📅 今日课程</h2>
           <span class="pill" id="todayPill">--</span>
+        </div>
+        <div class="count" id="countBox">
+          <div class="ci" id="countIc">⏰</div>
+          <div>
+            <div class="ct" id="countTt">下节课</div>
+            <div class="cv" id="countVal">--</div>
+          </div>
         </div>
         <div id="todayBox"><div class="ld"><div class="spin"></div><div>加载中…</div></div></div>
       </div>
@@ -179,20 +263,51 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
       </div>
     </div>
 
-    <div class="panel" id="p-set">
+    <div class="panel" id="p-exam">
+      <div class="card">
+        <div class="card-hd">
+          <h2>📝 近期考试</h2>
+          <span class="pill" id="examPill">倒计时</span>
+        </div>
+        <div id="examBox"><div class="ld"><div class="spin"></div><div>加载中…</div></div></div>
+      </div>
+    </div>
+
+    <div class="panel" id="p-me">
+      <div class="card">
+        <div class="avatar-r">
+          <div class="a" id="meAva">…</div>
+          <div>
+            <div class="an" id="meName">同学</div>
+            <div class="as" id="meSub">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd"><h2>⚙️ 设置</h2></div>
+        <div class="sw">
+          <div class="swl"><div class="sl">深色模式</div><div class="sr">夜间护眼配色</div></div>
+          <button class="toggle" id="darkToggle" onclick="toggleTheme()"></button>
+        </div>
+        <div class="sw">
+          <div class="swl"><div class="sl">导出课表到日历</div><div class="sr">生成 .ics 文件</div></div>
+          <button class="btn gh2" style="width:auto;padding:9px 18px" onclick="exportICS()">导出</button>
+        </div>
+        <div class="sw">
+          <div class="swl"><div class="sl">刷新数据</div><div class="sr">重新拉取课表/考试</div></div>
+          <button class="btn gh2" style="width:auto;padding:9px 18px" onclick="refreshAll()">刷新</button>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-hd"><h2>🔔 钉钉推送</h2></div>
-        <div class="tip" id="pushTip">
-          每天 21:00 会自动把<b>次日课表</b>推送到钉钉群。
-        </div>
+        <div class="tip">每天 21:00 自动把<b>当日课表</b>推送到钉钉群（由定时任务完成）。</div>
         <div class="field" style="margin-top:14px">
-          <label>群机器人 Webhook（可选，仅存本机浏览器）</label>
+          <label>群机器人 Webhook（仅存本机浏览器）</label>
           <input type="text" id="whUrl" placeholder="https://oapi.dingtalk.com/robot/send?access_token=">
         </div>
         <button class="btn pri" onclick="saveWh()">保存 Webhook</button>
-        <div class="tip" style="margin-top:12px">
-          ⚠️ 钉钉接口不支持网页直接调用，所以自动推送由定时任务完成，网页这里只保存配置。
-        </div>
       </div>
 
       <div class="card">
@@ -207,11 +322,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
         </div>
         <button class="btn pri" onclick="saveAcc()">保存并重新登录</button>
         <button class="btn dgr" onclick="logout()">退出登录</button>
-        <div class="tip" style="margin-top:12px">
-          账号密码保存在这台设备的浏览器里，下次打开自动登录，不需要再输。
-        </div>
+        <div class="tip" style="margin-top:12px">账号密码保存在这台设备的浏览器里，下次打开自动登录，不需要再输。</div>
       </div>
+
+      <div class="tip" style="text-align:center;background:transparent;color:var(--tx2)">课表助手 · 本地运行 · 数据不出本机</div>
     </div>
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="sheet">
+    <div class="grab"></div>
+    <h3 id="mName">课程详情</h3>
+    <div id="mRows"></div>
+    <button class="btn gh2 sclose" onclick="closeModal()">关闭</button>
   </div>
 </div>
 
@@ -328,16 +452,18 @@ async function loadToday(){
   try{
     const j = await api('/biz/v410/schedule/listStudentTodayLesson');
     const list = (j.data?.data || j.data || []).map(parse).sort((a,b)=>(a.b||99)-(b.b||99));
+    ST.todayList = list;
     const now = new Date();
     $('#todayPill').textContent = `${fmt(now)} ${WD[now.getDay()]}`;
     if(!list.length){
       box.innerHTML = `<div class="empty"><div class="ic">🎉</div><p>今天没有课，好好休息</p></div>`;
+      $('#countBox').style.display='none';
       return;
     }
-    box.innerHTML = '<div class="tl">' + list.map(c=>{
+    box.innerHTML = '<div class="tl">' + list.map((c,i)=>{
       const sec = c.b===c.e ? `第${c.b}节` : `第${c.b}<b>-${c.e}</b>节`;
       const tm = c.bt ? `${c.bt}${c.et?'<br>'+c.et:''}` : '';
-      return `<div class="lesson">
+      return `<div class="lesson" onclick="openToday(${i})">
         <div class="ltime"><div class="sec">${sec}</div>${tm?`<div class="tm">${tm}</div>`:''}</div>
         <div class="lbody">
           <div class="lname">${c.name}</div>
@@ -349,6 +475,7 @@ async function loadToday(){
         </div>
       </div>`;
     }).join('') + '</div>';
+    startCountdown();
   }catch(e){ box.innerHTML = `<div class="empty"><div class="ic">⚠️</div><p>${e.message}</p></div>`; }
 }
 
@@ -366,6 +493,7 @@ async function loadWeek(){
     });
     const d = sj.data || {};
     const list = (d.arrangedList||[]).map(parse);
+    ST.weekList = list;
     $('#weekPill').textContent = `第 ${wk.serialNumber} 周`;
 
     const today = new Date().getDay() || 7;
@@ -378,7 +506,8 @@ async function loadWeek(){
         const cs = list.filter(c=>c.b<=s && c.e>=s && c.day===i);
         if(cs.length){
           const c = cs[0];
-          h += `<div class="gc busy${i===today?' now':''}" title="${c.name} ${c.teacher||''} ${c.place||''}">
+          const idx = list.indexOf(c);
+          h += `<div class="gc busy${i===today?' now':''}" title="${c.name} ${c.teacher||''} ${c.place||''}" onclick="openWeek(${idx})">
             <div class="cn">${c.name}</div>${c.place?`<div class="pl">${c.place}</div>`:''}
           </div>`;
         } else h += '<div class="gc"></div>';
@@ -398,9 +527,174 @@ async function loadMe(){
     $('#hiName').textContent = name;
     $('#ava').textContent = name.slice(-2);
     $('#hiSub').textContent = [u.className, u.zymc].filter(Boolean).join(' · ');
+    const sub = [u.className, u.zymc].filter(Boolean).join(' · ');
+    $('#meName').textContent = name;
+    $('#meAva').textContent = name.slice(-2);
+    $('#meSub').textContent = sub || '已登录';
     const n = new Date();
     $('#hiChip').textContent = `📅 ${fmt(n)} ${WD[n.getDay()]}`;
   }catch(e){ console.warn(e); }
+}
+
+/* 下节课实时倒计时 */
+let _cdTimer = null;
+function startCountdown(){
+  if(_cdTimer) clearInterval(_cdTimer);
+  const cb = $('#countBox');
+  const tick = ()=>{
+    const list = ST.todayList || [];
+    if(!list.length){ cb.style.display='none'; return; }
+    const now = new Date();
+    let next=null, cur=null;
+    for(const c of list){
+      if(!c.bt) continue;
+      const [sh,sm] = c.bt.split(':').map(Number);
+      const [eh,em] = (c.et||c.bt).split(':').map(Number);
+      const s = new Date(now); s.setHours(sh,sm,0,0);
+      const e = new Date(now); e.setHours(eh,em,0,0);
+      if(now>=s && now<=e) cur = c;
+      if(now<s && (!next || s<next._s)){ next = c; next._s = s; }
+    }
+    cb.style.display='flex';
+    if(cur){
+      cb.classList.remove('over');
+      $('#countIc').textContent='📖';
+      $('#countTt').textContent = cur.name + ' 进行中';
+      $('#countVal').textContent = '第' + cur.b + (cur.b===cur.e?'':'-'+cur.e) + '节';
+      return;
+    }
+    if(next){
+      cb.classList.remove('over');
+      const diff = Math.max(0, next._s - now);
+      const h = Math.floor(diff/3600000), m = Math.floor(diff%3600000/60000), s = Math.floor(diff%60000/1000);
+      $('#countIc').textContent='⏰';
+      $('#countTt').textContent = '距下节课 · ' + next.name;
+      $('#countVal').innerHTML = h
+        ? `${h}<small>时</small>${m}<small>分</small>`
+        : `${m}<small>分</small>${String(s).padStart(2,'0')}<small>秒</small>`;
+      return;
+    }
+    cb.classList.add('over');
+    $('#countIc').textContent='🎉';
+    $('#countTt').textContent = '今日课程已全部结束';
+    $('#countVal').textContent = '明天见';
+  };
+  tick();
+  _cdTimer = setInterval(tick, 1000);
+}
+
+/* 考试倒计时 */
+async function loadExams(){
+  const box = $('#examBox');
+  try{
+    const j = await api('/biz/v410/examTask/recentExams');
+    let ex = j.data;
+    if(!ex) ex = [];
+    if(!Array.isArray(ex)) ex = [ex];
+    const today = new Date(); today.setHours(0,0,0,0);
+    const items = ex.map(raw=>{
+      const name = raw.examName || raw.courseName || raw.name || '考试';
+      const ds = (raw.examDate || raw.examTime || raw.date || raw.startTime || raw.kssj || '').toString().slice(0,10);
+      const tm = (raw.examTime || raw.startTime || raw.kssj || '').toString();
+      const tstr = (tm.match(/[01]?\d:\d{2}/) || [''])[0];
+      const loc = raw.place || raw.placeName || raw.roomName || '';
+      return {name, ds, tstr, loc};
+    }).filter(x=>x.ds).map(x=>{
+      const diff = Math.round((new Date(x.ds+'T00:00:00') - today)/86400000);
+      return {...x, diff};
+    }).sort((a,b)=>a.diff-b.diff);
+    if(!items.length){
+      box.innerHTML = `<div class="empty"><div class="ic">📭</div><p>暂时没有待考科目</p></div>`;
+      $('#examPill').textContent = '暂无';
+      return;
+    }
+    box.innerHTML = items.map(x=>{
+      const dd = x.diff===0 ? '就是今天' : (x.diff<0 ? `已考 ${-x.diff} 天` : `还有 ${x.diff} 天`);
+      return `<div class="exam">
+        <div class="eb"><b>${x.ds.slice(8,10)}</b><span>${x.ds.slice(5,7)}月</span></div>
+        <div class="ei">
+          <div class="en">${x.name}</div>
+          <div class="em">${x.ds}${x.tstr?(' '+x.tstr):''}${x.loc?(' · '+x.loc):''}</div>
+          <div class="ed">${dd}</div>
+        </div>
+      </div>`;
+    }).join('');
+    $('#examPill').textContent = items.length + ' 门';
+  }catch(e){
+    box.innerHTML = `<div class="empty"><div class="ic">⚠️</div><p>${e.message}</p></div>`;
+  }
+}
+
+/* 课程详情弹窗 */
+function openDetail(c, weekday){
+  if(!c) return;
+  $('#mName').textContent = c.name;
+  const rows = [
+    weekday ? ['星期', WD[weekday]||'—'] : null,
+    ['节次', c.b===c.e ? `第${c.b}节` : `第${c.b}-${c.e}节`],
+    ['时间', [c.bt,c.et].filter(Boolean).join(' ~ ') || '—'],
+    ['老师', c.teacher || '—'],
+    ['地点', c.place || '—'],
+    ['类型', c.type || '—']
+  ].filter(Boolean);
+  $('#mRows').innerHTML = rows.map(r=>
+    `<div class="srow"><div class="sk">${r[0]}</div><div class="sv">${r[1]}</div></div>`).join('');
+  $('#modal').classList.add('show');
+}
+function openToday(i){ openDetail(ST.todayList?.[i], null); }
+function openWeek(idx){ const c = ST.weekList?.[idx]; openDetail(c, c?.day); }
+function closeModal(){ $('#modal').classList.remove('show'); }
+$('#modal').addEventListener('click', e=>{ if(e.target.id==='modal') closeModal(); });
+
+/* 主题（深色模式） */
+function applyTheme(t){
+  const dark = t==='dark';
+  document.documentElement.setAttribute('data-theme', dark?'dark':'light');
+  const btn = $('#themeBtn'); if(btn) btn.textContent = dark?'☀️':'🌙';
+  const tg = $('#darkToggle'); if(tg) tg.classList.toggle('on', dark);
+}
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme')==='dark' ? 'dark' : 'light';
+  const next = cur==='dark' ? 'light' : 'dark';
+  localStorage.setItem('cb_theme', next);
+  applyTheme(next);
+}
+
+/* 导出课表 .ics */
+async function exportICS(){
+  if(!ST.weekList || !ST.weekList.length){
+    return toast('请先打开「本周」加载课表', true);
+  }
+  const now = new Date();
+  const dow = (now.getDay()+6)%7;
+  const mon = new Date(now); mon.setDate(now.getDate()-dow); mon.setHours(0,0,0,0);
+  const pad = n => String(n).padStart(2,'0');
+  const dt = d => `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+  const esc = s => (s||'').replace(/([,;\\])/g,'\\$1').replace(/\n/g,'\\n');
+  const L = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//课表助手//CN','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
+  for(const c of ST.weekList){
+    if(!c.day || !c.bt) continue;
+    const day = new Date(mon); day.setDate(mon.getDate()+(c.day-1));
+    const [sh,sm] = c.bt.split(':').map(Number);
+    const [eh,em] = (c.et||c.bt).split(':').map(Number);
+    const s = new Date(day); s.setHours(sh,sm,0,0);
+    const e = new Date(day); e.setHours(eh,em,0,0);
+    const uid = `${c.name}-${c.day}-${c.b}@gypec`;
+    L.push('BEGIN:VEVENT','UID:'+uid,
+      'SUMMARY:'+esc(c.name)+(c.type?('('+c.type+')'):''),
+      'LOCATION:'+esc(c.place||''),
+      'DESCRIPTION:'+esc('教师：'+(c.teacher||'')+'  节次：第'+(c.b===c.e?c.b:(c.b+'-'+c.e))+'节'),
+      'DTSTART:'+dt(s),'DTEND:'+dt(e),
+      'RRULE:FREQ=WEEKLY;COUNT=18','END:VEVENT');
+  }
+  L.push('END:VCALENDAR');
+  const blob = new Blob([L.join('\r\n')], {type:'text/calendar;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '我的课表.ics';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('已导出 .ics，可导入系统日历');
 }
 
 /* 首次登录 */
@@ -420,12 +714,19 @@ async function doLogin(){
 }
 
 async function boot(){
+  applyTheme(localStorage.getItem('cb_theme')||'light');
   $('#lUser').value = localStorage.getItem(K.u)||'';
   $('#lPwd').value = localStorage.getItem(K.p)||'';
   $('#acc').value = localStorage.getItem(K.u)||'';
   $('#pwd').value = localStorage.getItem(K.p)||'';
   $('#whUrl').value = localStorage.getItem(K.w)||'';
   await loadMe(); loadToday(); loadWeek();
+}
+
+function refreshAll(){
+  toast('正在刷新…');
+  loadMe(); loadToday(); loadWeek();
+  if($('#p-exam').classList.contains('on')) loadExams();
 }
 
 function saveAcc(){
@@ -448,11 +749,15 @@ function logout(keep){
 $$('.tab').forEach(t=>t.onclick=()=>{
   $$('.tab').forEach(x=>x.classList.remove('on')); t.classList.add('on');
   $$('.panel').forEach(p=>p.classList.remove('on'));
-  $('#p-'+t.dataset.t).classList.add('on');
+  const k = t.dataset.t;
+  $('#p-'+k).classList.add('on');
+  if(k==='exam') loadExams();
+  if(k==='today') startCountdown();
 });
 
 /* 启动 */
 (async function(){
+  applyTheme(localStorage.getItem('cb_theme')||'light');
   if(!ST.token){
     const u = localStorage.getItem(K.u), p = localStorage.getItem(K.p);
     if(u && p){
