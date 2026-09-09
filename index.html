@@ -322,6 +322,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
     <div class="field"><label>学号</label><input type="text" id="lUser" placeholder="请输入学号" autocomplete="username"></div>
     <div class="field"><label>密码</label><input type="password" id="lPwd" placeholder="教务系统密码" autocomplete="current-password"></div>
     <button class="btn pri" id="lBtn" onclick="doLogin()">登录</button>
+    <button class="btn ghost" id="lDiag" onclick="runDiag()" style="margin-top:10px">🔧 网络诊断</button>
+    <div id="diagOut" class="tip" style="display:none;margin-top:10px;text-align:left;line-height:1.6;white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:12px"></div>
   </div>
 </div>
 
@@ -372,24 +374,76 @@ async function relogin(){
   try{ await login(u,p); return true; }catch(e){ return false; }
 }
 async function login(user, pwd){
-  const kr = await fetch(BASE+'/auth/getPublicKey',{headers:{'Accept':'application/json'}});
+  let kr;
+  try{
+    kr = await fetch(BASE+'/auth/getPublicKey',{headers:{'Accept':'application/json'}});
+  }catch(e){
+    throw new Error('网络连接失败（GET 公钥）— 通常是浏览器扩展拦截或网络阻断：'+e.message);
+  }
+  if(!kr.ok) throw new Error('公钥接口 HTTP '+kr.status);
   const kd = (await kr.json()).data;
   const enc = new JSEncrypt();
   enc.setPublicKey(kd.publicKey);
   const ep = enc.encrypt(pwd);
   if(!ep) throw new Error('密码加密失败');
-  const r = await fetch(BASE+'/auth/login/mobile',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify({loginName:user, loginPassword:ep, openId:'', keyId:kd.keyId})
-  });
+  let r;
+  try{
+    r = await fetch(BASE+'/auth/login/mobile',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({loginName:user, loginPassword:ep, openId:'', keyId:kd.keyId})
+    });
+  }catch(e){
+    throw new Error('网络连接失败（POST 登录）— 通常是浏览器扩展拦截或网络阻断：'+e.message);
+  }
   const j = await r.json();
-  if(j.code!==200) throw new Error(j.msg||'登录失败');
+  if(j.code!==200) throw new Error(j.msg||('登录失败 code='+j.code));
   ST.token = j.data.token;
   localStorage.setItem(K.t, ST.token);
   localStorage.setItem(K.u, user);
   localStorage.setItem(K.p, pwd);
   return j.data;
+}
+
+/* 登录页一键网络诊断：定位 Failed to fetch 的真实原因 */
+async function runDiag(){
+  const box = $('#diagOut');
+  box.style.display='block';
+  const lines = [];
+  const push = (k,v,ok)=>lines.push(`${ok===true?'✅':ok===false?'❌':'•'} ${k}: ${v}`);
+  push('浏览器', `${navigator.userAgent.slice(0,90)}`);
+  push('在线状态', navigator.onLine?'在线':'离线', navigator.onLine);
+  push('当前时间', new Date().toString());
+  push('目标 API', BASE+'/auth/getPublicKey');
+  // 1. no-cors 探测（只验网络通不通，不读响应）
+  try{
+    const t0 = Date.now();
+    await fetch(BASE+'/auth/getPublicKey',{mode:'no-cors', cache:'no-store'});
+    push('网络层(no-cors)', `可达 ${Date.now()-t0}ms`, true);
+  }catch(e){
+    push('网络层(no-cors)', `不可达：${e.message}`, false);
+  }
+  // 2. CORS 探测（验 CORS 放行）
+  try{
+    const t0 = Date.now();
+    const r = await fetch(BASE+'/auth/getPublicKey',{cache:'no-store'});
+    const acao = r.headers.get('Access-Control-Allow-Origin');
+    push('CORS 探测', `HTTP ${r.status} ACAO=${acao} ${Date.now()-t0}ms`, r.ok);
+  }catch(e){
+    push('CORS 探测', `失败：${e.message}（这是浏览器拦截的典型表现）`, false);
+  }
+  // 3. 给老板的处置建议
+  lines.push('— — —');
+  if(!navigator.onLine){
+    lines.push('❗你当前离线，请连 WiFi/数据后再试');
+  }else{
+    lines.push('如 CORS 探测失败，请按顺序排查：');
+    lines.push('1) 关闭广告/隐私扩展（AdBlock/uBlock/360/QQ）后刷新');
+    lines.push('2) 用系统浏览器打开：右上角 ⋯ → 在 Safari/Chrome 中打开');
+    lines.push('3) 切换网络（WiFi → 4G/5G）后再试');
+    lines.push('4) 把诊断信息截图发我');
+  }
+  box.textContent = lines.join('\n');
 }
 /* 打开页面时确保 token 有效：失效（含"200 但返回空课表"的情况）则自动用本机凭据重登 */
 async function ensureLogin(){
