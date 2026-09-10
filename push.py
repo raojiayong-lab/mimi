@@ -133,19 +133,20 @@ def resolve_mode(arg, cfg):
 
 def main():
     cfg = load_config()
-    webhook = cfg.get("webhook_url")
+    arg = sys.argv[1] if len(sys.argv) > 1 else None
+
+    # 读取仓库里的推送配置（时间 + 补充内容 + sendNow + Webhook + 加签密钥）
+    repo_cfg = github_read("push-config.json", cfg.get("github_token")) or {}
+    push_time = repo_cfg.get("time") or cfg.get("push_time", "21:00")
+    extras = repo_cfg.get("extras") or []
+    send_now = repo_cfg.get("sendNow")
+    send_now_mode = repo_cfg.get("sendNowMode") or "today"
+    # Webhook / 加签密钥：优先用网页保存的（老板自己换群），没有再用 config.json
+    webhook = repo_cfg.get("webhook") or cfg.get("webhook_url")
+    dingtalk_secret = repo_cfg.get("dingtalkSecret") or cfg.get("dingtalk_secret")
     if not webhook:
         print("❌ 未配置 webhook_url，请在 config.json 或网页设置")
         return 1
-
-    arg = sys.argv[1] if len(sys.argv) > 1 else None
-
-    # 读取仓库里的推送配置（时间 + 补充内容 + sendNow 立即发送标记）
-    repo_cfg = github_read("push-config.json", cfg.get("github_token"))
-    push_time = (repo_cfg or {}).get("time") or cfg.get("push_time", "21:00")
-    extras = (repo_cfg or {}).get("extras") or []
-    send_now = (repo_cfg or {}).get("sendNow")
-    send_now_mode = (repo_cfg or {}).get("sendNowMode") or "today"
 
     if arg == "auto":
         now = datetime.datetime.now()
@@ -212,6 +213,7 @@ def main():
         title,
         content,
         card_buttons=CARD_BUTTONS,
+        secret=dingtalk_secret,
     )
     print(f"📤 Webhook 结果：{result}")
     return 0
