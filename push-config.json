@@ -1,12 +1,5 @@
 {
-  "time": "00:00",
-  "extras": [
-    {
-      "type": "text",
-      "text": "你是小笨蛋"
-    }
-  ],
-  "sendNow": false,
-  "sendNowMode": "today",
-  "webhook": "https://oapi.dingtalk.com/robot/send?access_token=4ba7db7b121150a009fe499db4675af299003112a1df2acd7a875329892171e9"
+  "time": "21:00",
+  "extras": [],
+  "sendNow": false
 }
