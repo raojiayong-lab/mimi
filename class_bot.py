@@ -432,15 +432,26 @@ def format_lesson_text(lesson):
     return f"{sections}{time_range} {lesson.get('courseName')} [{lesson.get('courseType')}] | {lesson.get('teacher')} | {lesson.get('place')}".strip()
 
 
-def send_webhook(webhook_url, webhook_type, title, content, card_buttons=None):
+def send_webhook(webhook_url, webhook_type, title, content, card_buttons=None, secret=None):
     """发送 webhook 消息
 
     card_buttons: 钉钉 actionCard 的按钮列表，如
         [{"title": "看课表", "actionURL": "https://..."}]
     传入则发送带按钮的互动卡片；不传则发普通 markdown。
+    secret: 钉钉机器人“加签”安全设置下的密钥；为空则按“自定义关键词”模式发送。
     """
     if not webhook_url:
         return {"ok": False, "msg": "未配置 webhook_url"}
+
+    # 钉钉：若配置了加签密钥，则追加 timestamp + sign（兼容“加签”安全设置）
+    if webhook_type == "dingtalk" and secret:
+        import hmac, hashlib, time
+        ts = str(int(time.time() * 1000))
+        string_to_sign = f"{ts}\n{secret}"
+        mac = hmac.new(secret.encode("utf-8"), string_to_sign.encode("utf-8"), hashlib.sha256).digest()
+        sign = urllib.parse.quote_plus(base64.b64encode(mac).decode("utf-8"))
+        sep = "&" if "?" in webhook_url else "?"
+        webhook_url = f"{webhook_url}{sep}timestamp={ts}&sign={sign}"
 
     # 钉钉
     if webhook_type == "dingtalk":
