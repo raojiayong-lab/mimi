@@ -2,5 +2,5 @@
   "time": "21:00",
   "extras": [],
   "sendNow": false,
-  "sendNowMode": "tomorrow"
+  "webhook": "https://oapi.dingtalk.com/robot/send?access_token=FAKE_TEST_TOKEN_12345"
 }
