@@ -284,8 +284,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 
       <div class="card">
         <div class="card-hd"><h2>🤖 钉钉机器人</h2></div>
-        <div class="tip">钉钉群机器人已在服务器端配好，每天定时推送 + 随时手动推送都走它。</div>
-        <div class="field" style="margin-top:10px"><label>立即发送的内容</label>
+        <div class="tip">默认 Webhook 已内置。要换群或换机器人？填下面两个输入框、点「保存到云端」立即生效（不用找老板了）。</div>
+        <div class="field" style="margin-top:8px"><label>钉钉机器人 Webhook URL</label>
+          <input type="text" id="whUrl" placeholder="https://oapi.dingtalk.com/robot/send?access_token=...">
+        </div>
+        <div class="field"><label>机器人密钥（加签模式才需要，关键词模式留空）</label>
+          <input type="password" id="whSecret" placeholder="关键词模式不用填；选加签模式时把机器人的 secret 贴这里">
+        </div>
+        <div style="display:flex;gap:10px;margin-top:6px">
+          <button class="btn gh2" style="flex:1" onclick="saveWebhook()">💾 保存到云端</button>
+          <button class="btn pri" style="flex:1" onclick="saveWebhookAndTest()">🧪 保存并立即测试发送</button>
+        </div>
+        <div class="tip" id="whStatus" style="margin-top:8px">正在读取云端配置…</div>
+        <div class="field" style="margin-top:14px"><label>立即发送的内容</label>
           <select id="sendMode">
             <option value="today">今日课表</option>
             <option value="tomorrow">明日课表</option>
@@ -296,7 +307,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
           <button class="btn pri" style="flex:1" onclick="sendNow()">🚀 立即发送</button>
           <button class="btn gh2" style="flex:1" onclick="saveSchedule()">⏰ 定时发送</button>
         </div>
-        <div class="tip" style="margin-top:10px">📌 "立即发送"按上面选的模式马上推一条；"定时发送"保存每日推送时间（时间在上方可改）。</div>
+        <div class="tip" style="margin-top:10px">📌 "立即发送"按上面选的模式马上推一条；"定时发送"保存每日推送时间（时间在"推送设置"卡片可改）。</div>
       </div>
 
       <div class="card">
@@ -800,6 +811,21 @@ async function ghWrite(path, obj){
   const res = await ghReq('PUT', path, payload);
   return {ok: res.status===200||res.status===201, status:res.status, msg: res.data&&res.data.message};
 }
+/* 从云端读 push-config.json（避免在写时丢失 webhook 等其他字段） */
+async function ghRead(path){
+  const r = await ghReq('GET', path);
+  if(r.status!==200 || !r.data || !r.data.content) return {};
+  try{
+    const bytes = Uint8Array.from(atob(r.data.content.replace(/\n/g,'')), c=>c.charCodeAt(0));
+    return JSON.parse(new TextDecoder('utf-8').decode(bytes)) || {};
+  }catch(e){ return {}; }
+}
+/* 合并写入 push-config.json：先 GET 当前内容，再把新字段叠上去再 PUT，避免覆盖 webhook */
+async function mergePushCfg(patch){
+  const prev = await ghRead('push-config.json');
+  return await ghWrite('push-config.json', Object.assign({}, prev, patch));
+}
+
 /* 保存每日定时推送（写入仓库 push-config.json 的 time + 补充内容） */
 async function saveSchedule(){
   const time = $('#pushTime').value || '21:00';
@@ -807,13 +833,13 @@ async function saveSchedule(){
   localStorage.setItem(K.pc, JSON.stringify(ST.blocks));
   toast('已保存到本机');
   try{
-    const res = await ghWrite('push-config.json', {time, extras:ST.blocks, sendNow:false});
+    const res = await mergePushCfg({time, extras:ST.blocks, sendNow:false});
     if(res.ok) toast('已保存定时推送，每天 '+time+' 自动发 ✅');
     else toast('同步失败：'+(res.msg||res.status), true);
   }catch(e){ toast('同步失败：'+e.message, true); }
 }
 
-/* 立即发送：写入 sendNow 标记，GitHub Actions（每 15 分钟）会立刻发送并清除标记；
+/* 立即发送：写入 sendNow 标记，每 5 分钟定时任务捕获即发并清除标记；
    同时用内置 Token 尝试 workflow_dispatch 实现秒级送达（若 Token 无 workflow 权限则静默忽略，由定时任务兜底） */
 async function sendNow(mode){
   mode = mode || (($('#sendMode') && $('#sendMode').value) || 'today');
@@ -823,12 +849,52 @@ async function sendNow(mode){
   const label = {today:'今日', tomorrow:'明日', week:'本周'}[mode] || '今日';
   toast('正在触发「'+label+'」立即推送…');
   try{
-    const res = await ghWrite('push-config.json', {time, extras:ST.blocks, sendNow:true, sendNowMode:mode});
+    const res = await mergePushCfg({time, extras:ST.blocks, sendNow:true, sendNowMode:mode});
     if(res.ok){
       toast('已提交，约 5 分钟内推送到钉钉 ✅');
       triggerDispatch(mode);
     } else toast('提交失败：'+(res.msg||res.status), true);
   }catch(e){ toast('提交失败：'+e.message, true); }
+}
+
+/* 保存钉钉 Webhook（老板自己换群用：写入云端 push-config.json.webhook / dingtalkSecret） */
+async function saveWebhook(){
+  const url = $('#whUrl').value.trim();
+  const sec = $('#whSecret').value.trim();
+  if(!url) return toast('请填写 Webhook URL', true);
+  if(!/^https?:\/\//i.test(url)) return toast('URL 格式不对，应以 http/https 开头', true);
+  const patch = {webhook: url};
+  if(sec) patch.dingtalkSecret = sec;
+  try{
+    const res = await mergePushCfg(patch);
+    if(res.ok){
+      toast('Webhook 已保存到云端 ✅');
+      refreshWhStatus(url);
+    } else toast('保存失败：'+(res.msg||res.status), true);
+  }catch(e){ toast('保存失败：'+e.message, true); }
+}
+async function saveWebhookAndTest(){
+  await saveWebhook();
+  // 紧接着触发一次立即发送，验证新 Webhook 真的能收到
+  const mode = ($('#sendMode') && $('#sendMode').value) || 'today';
+  sendNow(mode);
+}
+/* 启动时从云端拉 Webhook/密钥并预填输入框 */
+async function loadWebhookCfg(){
+  const cfg = await ghRead('push-config.json');
+  if(cfg.webhook){ $('#whUrl').value = cfg.webhook; }
+  if(cfg.dingtalkSecret){ $('#whSecret').value = cfg.dingtalkSecret; }
+  refreshWhStatus(cfg.webhook);
+}
+function refreshWhStatus(url){
+  const el = $('#whStatus');
+  if(!el) return;
+  if(url){
+    const short = url.length>50 ? url.slice(0,50)+'…' : url;
+    el.innerHTML = '当前：<span style="color:#10b981;font-weight:600">✅ 已保存到云端</span> · '+escH(short);
+  } else {
+    el.innerHTML = '<span style="color:#f59e0b">⚠️ 未设置，将使用服务器端默认配置</span>';
+  }
 }
 async function triggerDispatch(mode){
   try{
@@ -867,6 +933,7 @@ async function boot(){
   $('#pushTime').value = localStorage.getItem(K.pt)||'21:00';
   loadBlocks(); renderBlocks();
   await loadMe(); loadToday(); loadWeek();
+  loadWebhookCfg();
 }
 function saveAcc(){
   localStorage.setItem(K.u, $('#acc').value.trim());
