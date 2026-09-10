@@ -1,0 +1,49 @@
+name: 课表定时推送
+on:
+  schedule:
+    - cron: '*/5 * * * *'          # 每 5 分钟检查一次：到点则推送，或网页点了"立即发送"则马上推
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: '推送模式 today/tomorrow/week'
+        required: false
+        default: 'today'
+permissions:
+  contents: write
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: 安装依赖
+        run: pip install requests
+      - name: 生成运行配置（webhook / 密码来自仓库 Secrets，不落库）
+        env:
+          DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
+          JW_PASSWORD: ${{ secrets.JW_PASSWORD }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python - <<'PYINNER'
+          import os, json
+          cfg = {
+              "username": "202517010060",
+              "password": os.environ["JW_PASSWORD"],
+              # webhook 以云端 push-config.json 为准（网页随时可换）；此处仅作兜底
+              "webhook_url": os.environ.get("DINGTALK_WEBHOOK", ""),
+              "webhook_type": "dingtalk",
+              "push_time": "21:00",
+              "push_mode": "today",
+              "push_enabled": True,
+              "github_token": os.environ["GH_TOKEN"],
+              "term_code": "2026-2027-1",
+              "campus_id": "1"
+          }
+          with open("config.json", "w", encoding="utf-8") as f:
+              json.dump(cfg, f, ensure_ascii=False, indent=2)
+          print("config.json 已生成")
+          PYINNER
+      - name: 推送
+        run: python push.py ${{ github.event.inputs.mode || 'auto' }}
