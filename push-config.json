@@ -1,12 +1,7 @@
 {
   "time": "21:00",
-  "extras": [
-    {
-      "type": "text",
-      "text": "已三连+评论+关注，求激活码，感谢"
-    }
-  ],
+  "extras": [],
   "sendNow": true,
   "webhook": "https://oapi.dingtalk.com/robot/send?access_token=4ba7db7b121150a009fe499db4675af299003112a1df2acd7a875329892171e9",
-  "sendNowMode": "today"
+  "sendNowMode": "tomorrow"
 }
