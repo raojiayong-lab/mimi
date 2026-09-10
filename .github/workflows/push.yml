@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: 安装依赖
-        run: pip install requests
+        run: pip install requests aiohttp pycryptodome
       - name: 生成运行配置（webhook / 密码来自仓库 Secrets，不落库）
         env:
           DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
