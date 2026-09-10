@@ -149,7 +149,8 @@ def main():
         return 1
 
     if arg == "auto":
-        now = datetime.datetime.now()
+        # 统一用北京时间（UTC+8），云端 runner 是 UTC，避免定时发送被算到凌晨
+        now = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
         tok = cfg.get("github_token")
         state = github_read(STATE_PATH, tok) or {}
         # 立即发送标记优先：网页点了"立即发送"后，GitHub Actions 会在 15 分钟内捕获并发送
