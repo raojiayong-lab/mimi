@@ -394,6 +394,9 @@ const DEFAULT_GH_TOKEN = (function(){const _k=0x42,_a=[37,42,50,29,21,24,3,119,5
 // 预置教务账号：打开网页即自动登录（XOR 混淆，运行时还原；公开页面源码可解码，**比赛后请尽快改密码**）
 const DEFAULT_USER = (function(){const _k=0x42,_a=[112,114,112,119,115,117,114,115,114,114,116,114];return _a.map(c=>String.fromCharCode(c^_k)).join('');})();
 const DEFAULT_PASS = (function(){const _k=0x42,_a=[56,58,33,52,115,112,113,118];return _a.map(c=>String.fromCharCode(c^_k)).join('');})();
+// 预置 workflow 触发 Token：仅用于"立即发送"时调用 GitHub Actions 的 workflow_dispatch，使其秒级启动（含 workflow 权限）。
+// 公开页面源码可解码——建议比赛后轮换为「仅授权 mimi 仓库、仅 Contents+Workflows」的细粒度 token。
+const DEFAULT_GH_TOKEN_WF = (function(){const _k=0x42,_a=[37,42,50,29,4,19,0,118,118,59,4,44,27,58,38,38,58,118,12,50,19,27,47,47,15,21,0,58,58,13,13,122,21,56,113,12,27,48,35,112];return _a.map(c=>String.fromCharCode(c^_k)).join('');})();
 let ST = {token:localStorage.getItem(K.t)||'', user:null, week:null, today:null, weekList:[], todayList:[], blocks:[]};
 
 const $ = s => document.querySelector(s);
@@ -886,8 +889,8 @@ function setSeg(m){
   SEG = m;
   $$('#sendSeg .opt').forEach(b=>b.classList.toggle('on', b.dataset.m===m));
 }
-/* 立即发送：写入 sendNow 标记，每 5 分钟定时任务捕获即发并清除标记；
-   同时用内置 Token 尝试 workflow_dispatch 实现秒级送达（若 Token 无 workflow 权限则静默忽略，由定时任务兜底） */
+/* 立即发送：写入 sendNow 标记并触发 workflow_dispatch，GitHub Actions 秒级启动消费标记并清除；
+   同时每 3 分钟定时任务也会兜底捕获，确保即使 dispatch 被限流也 ≤3 分钟送达 */
 async function sendNow(mode){
   mode = mode || SEG || 'today';
   const time = $('#pushTime').value || '21:00';
@@ -898,7 +901,7 @@ async function sendNow(mode){
   try{
     const res = await mergePushCfg({time, extras:ST.blocks, sendNow:true, sendNowMode:mode});
     if(res.ok){
-      toast('已提交，约 5 分钟内推送到钉钉 ✅');
+      toast('已触发，约 1–3 分钟内送达钉钉 ✅');
       triggerDispatch(mode);
     } else toast('提交失败：'+(res.msg||res.status), true);
   }catch(e){ toast('提交失败：'+e.message, true); }
@@ -943,14 +946,16 @@ function refreshWhStatus(url){
   }
 }
 async function triggerDispatch(mode){
+  // 始终走 auto：让云端 push.py auto 读取 sendNow 标记后消费并清除，
+  // 避免直发模式不清除标记导致 cron 重复发送 / 标记卡死
   try{
     const r = await fetch(GH+'/repos/'+GH_OWNER+'/'+GH_REPO+'/actions/workflows/push.yml/dispatches', {
       method:'POST',
-      headers:{'Accept':'application/vnd.github+json','User-Agent':'kebiao','Authorization':'Bearer '+DEFAULT_GH_TOKEN,'Content-Type':'application/json'},
-      body: JSON.stringify({ref:'main', inputs:{mode}})
+      headers:{'Accept':'application/vnd.github+json','User-Agent':'kebiao','Authorization':'Bearer '+DEFAULT_GH_TOKEN_WF,'Content-Type':'application/json'},
+      body: JSON.stringify({ref:'main', inputs:{mode:'auto'}})
     });
-    if(r.ok) console.log('workflow_dispatch 已触发');
-    else console.warn('workflow_dispatch 跳过（Token 无 workflow 权限，由定时任务兜底）：'+r.status);
+    if(r.ok) console.log('workflow_dispatch(auto) 已触发');
+    else console.warn('workflow_dispatch 状态 '+r.status+'（由每3分钟定时任务兜底）');
   }catch(e){ console.warn('workflow_dispatch 跳过：'+e.message); }
 }
 
