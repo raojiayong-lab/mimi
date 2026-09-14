@@ -170,6 +170,8 @@ def main():
         print("❌ 未配置 webhook_url，请在 config.json 或网页设置")
         return 1
 
+    clear_sendnow = False  # 统一初始化，避免非 auto 分支引用时报 UnboundLocalError
+
     if arg == "auto":
         # 统一用北京时间（UTC+8），云端 runner 是 UTC，避免定时发送被算到凌晨
         now = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
@@ -190,6 +192,10 @@ def main():
             state["sched_date"] = now.strftime("%Y-%m-%d")
             github_write(STATE_PATH, state, tok)
             arg = None  # auto => 推送今日
+    else:
+        # 立即发送/手动触发（today/tomorrow/week）：若仓库里 sendNow 为 True，发送后清除标记
+        if send_now:
+            clear_sendnow = True
 
     if not cfg.get("push_enabled", True):
         print("ℹ️ 推送已禁用，跳过")
