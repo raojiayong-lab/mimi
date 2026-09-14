@@ -103,10 +103,11 @@ def should_send(now, target_time, state):
         target = now.replace(hour=int(th), minute=int(tm), second=0, microsecond=0)
     except Exception:
         return False
-    # 在目标时间起 60 分钟内（即下一个整点附近）、且今天尚未推送过，才发送
+    # 在目标时间起 60 分钟内（即下一个整点附近）、且今天尚未定时推送过，才发送
+    # 注意：立即发送(sendNow)走独立标记，不写 sched_date，绝不因此挡掉每晚定时推送
     if now < target or now >= target + datetime.timedelta(minutes=60):
         return False
-    if state.get("date") == now.strftime("%Y-%m-%d"):
+    if state.get("sched_date") == now.strftime("%Y-%m-%d"):
         return False
     return True
 
@@ -165,13 +166,13 @@ def main():
                     print("✅ 已清除 sendNow 标记")
                 except Exception as e:
                     print(f"⚠️ 清除 sendNow 标记失败：{e}")
-            state["date"] = now.strftime("%Y-%m-%d")
+            state["imm_date"] = now.strftime("%Y-%m-%d")
             github_write(STATE_PATH, state, tok)
         elif not should_send(now, push_time, state):
             print(f"ℹ️ 当前 {now:%H:%M} 未到推送时间 {push_time}，跳过")
             return 0
         else:
-            state["date"] = now.strftime("%Y-%m-%d")
+            state["sched_date"] = now.strftime("%Y-%m-%d")
             github_write(STATE_PATH, state, tok)
             arg = None  # auto => 推送今日
 
