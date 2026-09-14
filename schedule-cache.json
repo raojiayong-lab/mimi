@@ -1,0 +1,434 @@
+{
+  "week": {
+    "termCode": "2026-2027-1",
+    "serialNumber": 3,
+    "studentName": "饶佳永[202517010060]",
+    "studentCode": "202517010060",
+    "arranged": [
+      {
+        "courseName": "大学体育3",
+        "courseType": "必修",
+        "teacher": "杨高",
+        "place": "田径场",
+        "sections": "第五节-第六节",
+        "beginSection": 5,
+        "endSection": 6,
+        "beginTime": "13:30",
+        "endTime": "14:50",
+        "dayOfWeek": "4",
+        "weekDayText": null,
+        "raw": {
+          "courseName": "大学体育3",
+          "courseCode": "111100003",
+          "credit": "2.0",
+          "teachClassName": "大学体育3[111100003]-32",
+          "courseSerialNo": "32",
+          "teachingTarget": "25级环境设计02班",
+          "weeksAndTeachers": "1-3周[讲授]/杨高[主讲]",
+          "dayOfWeek": "4",
+          "endSection": 6,
+          "beginSection": 5,
+          "placeName": "田径场",
+          "color": "#FFF0CC",
+          "endTime": "14:50",
+          "beginTime": "13:30",
+          "cellDetail": [
+            {
+              "color": null,
+              "text": "大学体育3[必修]"
+            },
+            {
+              "color": null,
+              "text": "<a data-kblx=\"02\" data-code=\"32200261\" data-auth=\"0\">杨高</a>  第五节-第六节 <a data-kblx=\"01\" data-code=\"11501\" data-auth=\"0\">田径场</a> "
+            }
+          ],
+          "multiCourse": null,
+          "titleDetail": [
+            "大学体育3",
+            " <a data-kblx=\"02\" data-code=\"32200261\" data-auth=\"0\">杨高</a> <a data-kblx=\"01\" data-code=\"11501\" data-auth=\"0\">田径场</a>"
+          ],
+          "tags": [],
+          "teachClassId": "20262027111110000332"
+        }
+      },
+      {
+        "courseName": "空间模型制作",
+        "courseType": "限选",
+        "teacher": "廖珍珍",
+        "place": "厚学楼404",
+        "sections": "第一节-第四节",
+        "beginSection": 1,
+        "endSection": 4,
+        "beginTime": "08:40",
+        "endTime": "11:40",
+        "dayOfWeek": "4",
+        "weekDayText": null,
+        "raw": {
+          "courseName": "空间模型制作",
+          "courseCode": "173101394",
+          "credit": "4.0",
+          "teachClassName": "空间模型制作[173101394]-02",
+          "courseSerialNo": "02",
+          "teachingTarget": "25级环境设计02班",
+          "weeksAndTeachers": "1-18周[讲授]/廖珍珍[主讲]",
+          "dayOfWeek": "4",
+          "endSection": 4,
+          "beginSection": 1,
+          "placeName": "厚学楼404",
+          "color": "#FFDDD3",
+          "endTime": "11:40",
+          "beginTime": "08:40",
+          "cellDetail": [
+            {
+              "color": null,
+              "text": "空间模型制作[限选]"
+            },
+            {
+              "color": null,
+              "text": "<a data-kblx=\"02\" data-code=\"14211520\" data-auth=\"0\">廖珍珍</a>  第一节-第四节 <a data-kblx=\"01\" data-code=\"10217\" data-auth=\"0\">厚学楼404</a> "
+            }
+          ],
+          "multiCourse": null,
+          "titleDetail": [
+            "空间模型制作",
+            " <a data-kblx=\"02\" data-code=\"14211520\" data-auth=\"0\">廖珍珍</a> <a data-kblx=\"01\" data-code=\"10217\" data-auth=\"0\">厚学楼404</a>"
+          ],
+          "tags": [],
+          "teachClassId": "20262027117310139402"
+        }
+      },
+      {
+        "courseName": "室内外建筑效果图表现",
+        "courseType": "限选",
+        "teacher": "钟尉婷",
+        "place": "尚学楼204专业机房(3)",
+        "sections": "第一节-第四节",
+        "beginSection": 1,
+        "endSection": 4,
+        "beginTime": "08:40",
+        "endTime": "11:40",
+        "dayOfWeek": "5",
+        "weekDayText": null,
+        "raw": {
+          "courseName": "室内外建筑效果图表现",
+          "courseCode": "173101395",
+          "credit": "4.0",
+          "teachClassName": "室内外建筑效果图表现[173101395]-02",
+          "courseSerialNo": "02",
+          "teachingTarget": "25级环境设计02班",
+          "weeksAndTeachers": "1-18周[讲授]/钟尉婷[主讲]",
+          "dayOfWeek": "5",
+          "endSection": 4,
+          "beginSection": 1,
+          "placeName": "尚学楼204专业机房(3)",
+          "color": "#D3EAFD",
+          "endTime": "11:40",
+          "beginTime": "08:40",
+          "cellDetail": [
+            {
+              "color": null,
+              "text": "室内外建筑效果图表现[限选]"
+            },
+            {
+              "color": null,
+              "text": "<a data-kblx=\"02\" data-code=\"14214420\" data-auth=\"0\">钟尉婷</a>  第一节-第四节 <a data-kblx=\"01\" data-code=\"10117\" data-auth=\"0\">尚学楼204专业机房(3)</a> "
+            }
+          ],
+          "multiCourse": null,
+          "titleDetail": [
+            "室内外建筑效果图表现",
+            " <a data-kblx=\"02\" data-code=\"14214420\" data-auth=\"0\">钟尉婷</a> <a data-kblx=\"01\" data-code=\"10117\" data-auth=\"0\">尚学楼204专业机房(3)</a>"
+          ],
+          "tags": [],
+          "teachClassId": "20262027117310139502"
+        }
+      },
+      {
+        "courseName": "环境艺术设计基础",
+        "courseType": "必修",
+        "teacher": "夏子涵",
+        "place": "敬学楼304",
+        "sections": "第七节-第八节",
+        "beginSection": 7,
+        "endSection": 8,
+        "beginTime": "15:10",
+        "endTime": "16:30",
+        "dayOfWeek": "1",
+        "weekDayText": null,
+        "raw": {
+          "courseName": "环境艺术设计基础",
+          "courseCode": "172100354",
+          "credit": "1.0",
+          "teachClassName": "环境艺术设计基础[172100354]-02",
+          "courseSerialNo": "02",
+          "teachingTarget": "25级环境设计02班",
+          "weeksAndTeachers": "1-9周[讲授]/夏子涵[主讲]",
+          "dayOfWeek": "1",
+          "endSection": 8,
+          "beginSection": 7,
+          "placeName": "敬学楼304",
+          "color": "#D3F4F8",
+          "endTime": "16:30",
+          "beginTime": "15:10",
+          "cellDetail": [
+            {
+              "color": null,
+              "text": "环境艺术设计基础[必修]"
+            },
+            {
+              "color": null,
+              "text": "<a data-kblx=\"02\" data-code=\"14203720\" data-auth=\"0\">夏子涵</a>  第七节-第八节 <a data-kblx=\"01\" data-code=\"10313\" data-auth=\"0\">敬学楼304</a> "
+            }
+          ],
+          "multiCourse": null,
+          "titleDetail": [
+            "环境艺术设计基础",
+            " <a data-kblx=\"02\" data-code=\"14203720\" data-auth=\"0\">夏子涵</a> <a data-kblx=\"01\" data-code=\"10313\" data-auth=\"0\">敬学楼304</a>"
+          ],
+          "tags": [],
+          "teachClassId": "20262027117210035402"
+        }
+      },
+      {
+        "courseName": "软装设计",
+        "courseType": "必修",
+        "teacher": "冉小丽",
+        "place": "敬学楼305",
+        "sections": "第五节-第八节",
+        "beginSection": 5,
+        "endSection": 8,
+        "beginTime": "13:30",
+        "endTime": "16:30",
+        "dayOfWeek": "3",
+        "weekDayText": null,
+        "raw": {
+          "courseName": "软装设计",
+          "courseCode": "172100355",
+          "credit": "2.0",
+          "teachClassName": "软装设计[172100355]-02",
+          "courseSerialNo": "02",
+          "teachingTarget": "25级环境设计02班",
+          "weeksAndTeachers": "1-9周[讲授]/冉小丽[主讲]",
+          "dayOfWeek": "3",
+          "endSection": 8,
+          "beginSection": 5,
+          "placeName": "敬学楼305",
+          "color": "#E8F3DB",
+          "endTime": "16:30",
+          "beginTime": "13:30",
+          "cellDetail": [
+            {
+              "color": null,
+              "text": "软装设计[必修]"
+            },
+            {
+              "color": null,
+              "text": "<a data-kblx=\"02\" data-code=\"14207920\" data-auth=\"0\">冉小丽</a>  第五节-第八节 <a data-kblx=\"01\" data-code=\"10314\" data-auth=\"0\">敬学楼305</a> "
+            }
+          ],
+          "multiCourse": null,
+          "titleDetail": [
+            "软装设计",
+            " <a data-kblx=\"02\" data-code=\"14207920\" data-auth=\"0\">冉小丽</a> <a data-kblx=\"01\" data-code=\"10314\" data-auth=\"0\">敬学楼305</a>"
+          ],
+          "tags": [],
+          "teachClassId": "20262027117210035502"
+        }
+      },
+      {
+        "courseName": "环境艺术设计材料与施工工艺",
+        "courseType": "必修",
+        "teacher": "夏子涵",
+        "place": "敬学楼304",
+        "sections": "第一节-第四节",
+        "beginSection": 1,
+        "endSection": 4,
+        "beginTime": "08:40",
+        "endTime": "11:40",
+        "dayOfWeek": "3",
+        "weekDayText": null,
+        "raw": {
+          "courseName": "环境艺术设计材料与施工工艺",
+          "courseCode": "173101387",
+          "credit": "2.0",
+          "teachClassName": "环境艺术设计材料与施工工艺[173101387]-02",
+          "courseSerialNo": "02",
+          "teachingTarget": "25级环境设计02班",
+          "weeksAndTeachers": "1-9周[讲授]/夏子涵[主讲]",
+          "dayOfWeek": "3",
+          "endSection": 4,
+          "beginSection": 1,
+          "placeName": "敬学楼304",
+          "color": "#DDE4FE",
+          "endTime": "11:40",
+          "beginTime": "08:40",
+          "cellDetail": [
+            {
+              "color": null,
+              "text": "环境艺术设计材料与施工工艺[必修]"
+            },
+            {
+              "color": null,
+              "text": "<a data-kblx=\"02\" data-code=\"14203720\" data-auth=\"0\">夏子涵</a>  第一节-第四节 <a data-kblx=\"01\" data-code=\"10313\" data-auth=\"0\">敬学楼304</a> "
+            }
+          ],
+          "multiCourse": null,
+          "titleDetail": [
+            "环境艺术设计材料与施工工艺",
+            " <a data-kblx=\"02\" data-code=\"14203720\" data-auth=\"0\">夏子涵</a> <a data-kblx=\"01\" data-code=\"10313\" data-auth=\"0\">敬学楼304</a>"
+          ],
+          "tags": [],
+          "teachClassId": "20262027117310138702"
+        }
+      },
+      {
+        "courseName": "数字图形（ps）",
+        "courseType": "必修",
+        "teacher": "廖珍珍",
+        "place": "尚学楼204专业机房(3)",
+        "sections": "第一节-第六节",
+        "beginSection": 1,
+        "endSection": 6,
+        "beginTime": "08:40",
+        "endTime": "14:50",
+        "dayOfWeek": "2",
+        "weekDayText": null,
+        "raw": {
+          "courseName": "数字图形（ps）",
+          "courseCode": "171200036",
+          "credit": "3.0",
+          "teachClassName": "数字图形（ps）[171200036]-02",
+          "courseSerialNo": "02",
+          "teachingTarget": "25级环境设计02班",
+          "weeksAndTeachers": "1-9周[讲授]/廖珍珍[主讲]",
+          "dayOfWeek": "2",
+          "endSection": 6,
+          "beginSection": 1,
+          "placeName": "尚学楼204专业机房(3)",
+          "color": "#FCE0EA",
+          "endTime": "14:50",
+          "beginTime": "08:40",
+          "cellDetail": [
+            {
+              "color": null,
+              "text": "数字图形（ps）[必修]"
+            },
+            {
+              "color": null,
+              "text": "<a data-kblx=\"02\" data-code=\"14211520\" data-auth=\"0\">廖珍珍</a>  第一节-第六节 <a data-kblx=\"01\" data-code=\"10117\" data-auth=\"0\">尚学楼204专业机房(3)</a> "
+            }
+          ],
+          "multiCourse": null,
+          "titleDetail": [
+            "数字图形（ps）",
+            " <a data-kblx=\"02\" data-code=\"14211520\" data-auth=\"0\">廖珍珍</a> <a data-kblx=\"01\" data-code=\"10117\" data-auth=\"0\">尚学楼204专业机房(3)</a>"
+          ],
+          "tags": [],
+          "teachClassId": "20262027117120003602"
+        }
+      },
+      {
+        "courseName": "美育",
+        "courseType": "选修",
+        "teacher": "李婷婷",
+        "place": "综合楼109",
+        "sections": "第三节-第四节",
+        "beginSection": 3,
+        "endSection": 4,
+        "beginTime": "10:20",
+        "endTime": "11:40",
+        "dayOfWeek": "1",
+        "weekDayText": null,
+        "raw": {
+          "courseName": "美育",
+          "courseCode": "121200002",
+          "credit": "2.0",
+          "teachClassName": "美育[121200002]-22",
+          "courseSerialNo": "22",
+          "teachingTarget": "25级环境设计02班",
+          "weeksAndTeachers": "3-4周,9-10周,15-16周[讲授]/李婷婷[主讲]",
+          "dayOfWeek": "1",
+          "endSection": 4,
+          "beginSection": 3,
+          "placeName": "综合楼109",
+          "color": "#CCEAE7",
+          "endTime": "11:40",
+          "beginTime": "10:20",
+          "cellDetail": [
+            {
+              "color": null,
+              "text": "美育[选修]"
+            },
+            {
+              "color": null,
+              "text": "<a data-kblx=\"02\" data-code=\"14204420\" data-auth=\"0\">李婷婷</a>  第三节-第四节 <a data-kblx=\"01\" data-code=\"109\" data-auth=\"0\">综合楼109</a> "
+            }
+          ],
+          "multiCourse": null,
+          "titleDetail": [
+            "美育",
+            " <a data-kblx=\"02\" data-code=\"14204420\" data-auth=\"0\">李婷婷</a> <a data-kblx=\"01\" data-code=\"109\" data-auth=\"0\">综合楼109</a>"
+          ],
+          "tags": [],
+          "teachClassId": "20262027112120000222"
+        }
+      }
+    ],
+    "notArranged": [
+      {
+        "courseName": "四史",
+        "courseType": "必修",
+        "teacher": "唐闻晓",
+        "place": "",
+        "sections": "",
+        "beginSection": null,
+        "endSection": null,
+        "beginTime": "",
+        "endTime": "",
+        "dayOfWeek": null,
+        "weekDayText": null,
+        "raw": {
+          "courseName": "四史",
+          "courseCode": "231100024",
+          "credit": "1.0",
+          "teachClassName": "四史[231100024]-06",
+          "courseSerialNo": "06",
+          "teachingTarget": "25级音教03班，25级环境设计01班，25级环境设计02班，25级美教03班，25级美教02班，25级美教01班，25级音教02班，25级音教01班",
+          "weeksAndTeachers": "2-10周[讲授]/唐闻晓[主讲]",
+          "dayOfWeek": null,
+          "endSection": null,
+          "beginSection": null,
+          "placeName": null,
+          "color": null,
+          "endTime": "",
+          "beginTime": "",
+          "cellDetail": [
+            {
+              "color": null,
+              "text": "四史[必修]"
+            },
+            {
+              "color": null,
+              "text": "<a data-kblx=\"02\" data-code=\"28217220\" data-auth=\"0\">唐闻晓</a> "
+            }
+          ],
+          "multiCourse": null,
+          "titleDetail": [
+            "四史",
+            " <a data-kblx=\"02\" data-code=\"28217220\" data-auth=\"0\">唐闻晓</a>"
+          ],
+          "tags": [],
+          "teachClassId": "20262027123110002406"
+        }
+      }
+    ],
+    "practice": []
+  },
+  "exams": {
+    "code": 200,
+    "msg": "操作成功",
+    "data": null
+  },
+  "serialNumber": 3,
+  "updated": "2026-09-14 17:23"
+}
